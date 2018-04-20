@@ -4,7 +4,7 @@
              x:Class="SampleCosmosDb.Views.NewClub"
              Title="Add Club">
     <ContentPage.Content>
-        <StackLayout>
+        <StackLayout Padding="10">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>

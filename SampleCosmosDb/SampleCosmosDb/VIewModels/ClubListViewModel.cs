@@ -3,6 +3,7 @@ using Microsoft.Azure.Documents.Linq;
 using MvvmHelpers;
 using SampleCosmosDb.Constants;
 using SampleCosmosDb.Models;
+using SampleCosmosDb.Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -16,12 +17,11 @@ namespace SampleCosmosDb.VIewModels
 {
     public class ClubListViewModel : BaseViewModel
     {
-        private DocumentClient client;
-        private Uri collectionLink = UriFactory.CreateDocumentCollectionUri(@"SampleCosmos", @"Clubs");
+        private readonly DocumentDbService _documentDbService;
 
-        private ObservableRangeCollection<Club> _clubs;
+        private ObservableRangeCollection<Clubs> _clubs;
 
-        public ObservableRangeCollection<Club> Clubs
+        public ObservableRangeCollection<Clubs> Clubs
         {
             get { return _clubs; }
             set { _clubs = value; OnPropertyChanged(); }
@@ -30,9 +30,9 @@ namespace SampleCosmosDb.VIewModels
         public ICommand AddClubCmd { get; set; }
         public ClubListViewModel()
         {
-            client = new DocumentClient(new System.Uri(DocumentDbConstants.Url), DocumentDbConstants.ReadOnlyPrimaryKey);
+            _documentDbService = new DocumentDbService("Clubs");
 
-            Clubs = new ObservableRangeCollection<Club>();
+            Clubs = new ObservableRangeCollection<Clubs>();
 
             AddClubCmd = new Command(() => App.Current.MainPage.Navigation.PushAsync(new Views.NewClub()));
         }
@@ -41,13 +41,16 @@ namespace SampleCosmosDb.VIewModels
         {
             try
             {
-                var query = client.CreateDocumentQuery<Club>(collectionLink, new FeedOptions { MaxItemCount = -1 })
-                      .AsDocumentQuery();
+                IsBusy = true;
+                Device.BeginInvokeOnMainThread(() => Application.Current.MainPage.IsBusy = true);
 
-                while (query.HasMoreResults)
+                var listClub = await _documentDbService.GetAll<Clubs>();
+               
+                if (listClub.Count > 0)
                 {
-                    Clubs.AddRange(await query.ExecuteNextAsync<Club>());
+                    Clubs.AddRange(listClub);
                 }
+                IsBusy = false;
             }
             catch (Exception e)
             {
@@ -55,6 +58,5 @@ namespace SampleCosmosDb.VIewModels
             }
             
         }
-
     }
 }

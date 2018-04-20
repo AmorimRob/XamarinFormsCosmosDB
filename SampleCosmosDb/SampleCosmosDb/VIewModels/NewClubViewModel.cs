@@ -2,6 +2,7 @@
 using MvvmHelpers;
 using SampleCosmosDb.Constants;
 using SampleCosmosDb.Models;
+using SampleCosmosDb.Services;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -13,11 +14,10 @@ namespace SampleCosmosDb.VIewModels
 {
     public class NewClubViewModel : BaseViewModel
     {
-        private DocumentClient client;
-        private Uri collectionLink = UriFactory.CreateDocumentCollectionUri(@"SampleCosmos", @"Clubs");
+        private readonly DocumentDbService _documentDbService;
 
-        private Club _newClub;
-        public Club NewClub
+        private Clubs _newClub;
+        public Clubs NewClub
         {
             get { return _newClub; }
             set { _newClub = value; }
@@ -27,22 +27,21 @@ namespace SampleCosmosDb.VIewModels
 
         public NewClubViewModel()
         {
-            NewClub = new Club();
-            client = new DocumentClient(new System.Uri(DocumentDbConstants.Url), DocumentDbConstants.ReadWritePrimaryKey);
+            NewClub = new Clubs();
+            _documentDbService = new DocumentDbService("Clubs");
 
             SaveCmd = new Command(async () => await InsertItemAsync(NewClub));
         }
 
-        public async Task InsertItemAsync(Club club)
+        public async Task InsertItemAsync(Clubs club)
         {
             try
             {
                 club.Id = Guid.NewGuid().ToString();
+                
+                await _documentDbService.Create(club);
 
-                var result = await client.CreateDocumentAsync(collectionLink, club);
-
-                if(result.StatusCode == System.Net.HttpStatusCode.OK)
-                    await App.Current.MainPage.Navigation.PushAsync(new Views.ClubList());
+                await App.Current.MainPage.Navigation.PushAsync(new Views.ClubList());
                 
             }
             catch (Exception e)
@@ -50,5 +49,6 @@ namespace SampleCosmosDb.VIewModels
                 Console.Error.WriteLine(@"ERROR {0}", e.Message);
             }
         }
+
     }
 }
