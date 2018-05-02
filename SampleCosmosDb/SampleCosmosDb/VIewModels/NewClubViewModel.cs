@@ -1,8 +1,8 @@
 ﻿using Microsoft.Azure.Documents.Client;
 using MvvmHelpers;
+using SampleCosmosDb.ApplicationServices;
 using SampleCosmosDb.Constants;
 using SampleCosmosDb.Models;
-using SampleCosmosDb.Services;
 using System;
 using System.Collections.Generic;
 using System.Text;

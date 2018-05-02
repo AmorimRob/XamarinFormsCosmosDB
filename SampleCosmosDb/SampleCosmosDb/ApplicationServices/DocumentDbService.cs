@@ -13,7 +13,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 
-namespace SampleCosmosDb.Services
+namespace SampleCosmosDb.ApplicationServices
 {
     public class DocumentDbService
     {
@@ -32,7 +32,7 @@ namespace SampleCosmosDb.Services
 
         public Uri GetDocumentCollectionUri<T>(T document) where T : CosmosDbModel<T>
         {
-            return UriFactory.CreateDocumentCollectionUri(document.DatabaseId, document.CollectionId);
+            return UriFactory.CreateDocumentCollectionUri(_databaseId, document.CollectionId);
         }
         public async Task<List<T>> GetAll<T>() where T : CosmosDbModel<T>
         {
@@ -79,7 +79,8 @@ namespace SampleCosmosDb.Services
             {
                 var documentClient = GetReadWriteDocumentClient();
 
-                return await documentClient?.ReplaceDocumentAsync(CreateDocumentUri(document.Id), document);
+                var doc = await documentClient?.ReplaceDocumentAsync(CreateDocumentUri(document.Id), document);
+                return doc;
             }
             finally
             {

@@ -2,14 +2,16 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="SampleCosmosDb.Views.ClubList"
-             Title="Club List">
+             Title="Clubs App">
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="Add" Command="{Binding AddClubCmd}"/>
     </ContentPage.ToolbarItems>
     <ContentPage.Content>
         <StackLayout>
             <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}"/>
-            <ListView ItemsSource="{Binding Clubs}" HasUnevenRows="True">
+            <ListView ItemsSource="{Binding Clubs}" 
+                      HasUnevenRows="True"
+                      ItemSelected="ItemSelected">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>

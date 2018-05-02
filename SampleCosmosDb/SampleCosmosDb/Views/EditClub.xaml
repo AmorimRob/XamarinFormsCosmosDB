@@ -1,17 +1,17 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="SampleCosmosDb.Views.NewClub"
+             x:Class="SampleCosmosDb.Views.EditClub"
              Title="Clubs App">
     <ContentPage.Content>
         <StackLayout Padding="10">
-            <Label Text="Add Club"
+            <Label Text="Edit Club"
                    VerticalOptions="Center" 
                    HorizontalOptions="Center"
                    FontAttributes="Bold"
                    FontSize="Large"
                    Margin="20"/>
-             <Grid>
+            <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
@@ -24,9 +24,9 @@
                 <Label Text="Club Name: "
                        Grid.Column="0"
                        Grid.Row="0"/>
-            
+
                 <Entry Placeholder="Club Name"
-                       Text="{Binding NewClub.Name}"
+                       Text="{Binding Club.Name}"
                        Grid.Column="1"
                        Grid.Row="0"/>
 
@@ -35,12 +35,13 @@
                        Grid.Row="1"/>
 
                 <Entry Placeholder="Country"
-                       Text="{Binding NewClub.Country}"
+                       Text="{Binding Club.Country}"
                        Grid.Column="1"
                        Grid.Row="1"/>
 
             </Grid>
-            <Button Text="Save" Command="{Binding SaveCmd}"/>
+            <Button Text="Update" Command="{Binding UpdateCmd}"/>
+            <Button Text="Delete" Command="{Binding DeleteCmd}"/>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

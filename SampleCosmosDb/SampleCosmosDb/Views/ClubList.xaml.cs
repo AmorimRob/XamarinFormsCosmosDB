@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SampleCosmosDb.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -28,6 +29,11 @@ namespace SampleCosmosDb.Views
             base.OnAppearing();
 
             await _viewModel.GetAll(); 
+        }
+
+        protected void ItemSelected(object sender, SelectedItemChangedEventArgs e)
+        {
+            App.Current.MainPage.Navigation.PushAsync(new EditClub((Clubs)e.SelectedItem));
         }
     }
 }

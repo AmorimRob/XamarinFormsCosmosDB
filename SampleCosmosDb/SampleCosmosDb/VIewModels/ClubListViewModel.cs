@@ -1,6 +1,7 @@
 ﻿using Microsoft.Azure.Documents.Client;
 using Microsoft.Azure.Documents.Linq;
 using MvvmHelpers;
+using SampleCosmosDb.ApplicationServices;
 using SampleCosmosDb.Constants;
 using SampleCosmosDb.Models;
 using SampleCosmosDb.Services;
@@ -32,8 +33,6 @@ namespace SampleCosmosDb.VIewModels
         {
             _documentDbService = new DocumentDbService("Clubs");
 
-            Clubs = new ObservableRangeCollection<Clubs>();
-
             AddClubCmd = new Command(() => App.Current.MainPage.Navigation.PushAsync(new Views.NewClub()));
         }
 
@@ -41,6 +40,7 @@ namespace SampleCosmosDb.VIewModels
         {
             try
             {
+                Clubs = new ObservableRangeCollection<Clubs>();
                 IsBusy = true;
                 Device.BeginInvokeOnMainThread(() => Application.Current.MainPage.IsBusy = true);
 
